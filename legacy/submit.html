@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit a Pitch · Groundfloor</title>
+    <meta name="description" content="Record or upload your 60-second pitch. AI scores it in under a minute." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23e63312'/><text x='50%' y='56%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui' font-weight='900' font-size='13' fill='white'>GF</text></svg>" />
+    <style>
+        .ind-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 6px;
+        }
+
+        .ind-opt {
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            font-size: 0.77rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            text-align: center;
+            background: white;
+            transition: all var(--t);
+        }
+
+        .ind-opt:hover {
+            border-color: var(--border-dark);
+            color: var(--text-primary);
+        }
+
+        .ind-opt.sel {
+            border-color: var(--text-primary);
+            background: var(--text-primary);
+            color: white;
+        }
+
+        .review-card {
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 16px 18px;
+        }
+
+        .ai-step-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .ai-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .ai-step.done {
+            color: var(--green);
+        }
+
+        .ai-step.active {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .ai-step__dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--border-dark);
+            flex-shrink: 0;
+        }
+
+        .ai-step.done .ai-step__dot {
+            background: var(--green);
+        }
+
+        .ai-step.active .ai-step__dot {
+            background: var(--text-primary);
+            animation: live-pulse 1s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="nav">
+        <div class="nav__inner">
+            <a class="nav__logo" href="index.html">
+                <div class="nav__logo-mark">GF</div>
+                Groundfloor
+            </a>
+            <div class="nav__links">
+                <a class="nav__link" href="index.html">Feed</a>
+                <a class="nav__link active" href="submit.html">Submit</a>
+                <a class="nav__link" href="profile.html">Profile</a>
+            </div>
+            <div class="nav__actions">
+                <a href="index.html" class="btn btn--ghost btn--sm">← Back to feed</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container container--sm" style="padding: 48px 24px 80px;">
+
+            <!-- Header -->
+            <div style="margin-bottom: 36px;">
+                <h1 style="font-size: 1.55rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px;">Submit
+                    your pitch</h1>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">60 seconds. No deck. No gatekeeping. AI
+                    scores it in under a minute.</p>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-steps" role="list" aria-label="Submission steps">
+                <div class="progress-step active" id="ps-1" role="listitem">
+                    <div class="progress-step__dot" aria-label="Step 1">1</div>
+                    <div class="progress-step__label">Video</div>
+                </div>
+                <div class="progress-line" aria-hidden="true"></div>
+                <div class="progress-step" id="ps-2" role="listitem">
+                    <div class="progress-step__dot" aria-label="Step 2">2</div>
+                    <div class="progress-step__label">Pitch</div>
+                </div>
+                <div class="progress-line" aria-hidden="true"></div>
+                <div class="progress-step" id="ps-3" role="listitem">
+                    <div class="progress-step__dot" aria-label="Step 3">3</div>
+                    <div class="progress-step__label">Details</div>
+                </div>
+                <div class="progress-line" aria-hidden="true"></div>
+                <div class="progress-step" id="ps-4" role="listitem">
+                    <div class="progress-step__dot" aria-label="Step 4">4</div>
+                    <div class="progress-step__label">Review</div>
+                </div>
+            </div>
+
+            <!-- ── STEP 1: VIDEO ── -->
+            <div class="step-panel active" id="step-1">
+                <div class="upload-zone" id="upload-zone" role="button" tabindex="0"
+                    aria-label="Upload your pitch video">
+                    <input type="file" id="video-input" accept="video/*" />
+                    <div id="upload-idle">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"
+                            style="margin:0 auto 12px;">
+                            <rect width="28" height="28" rx="14" fill="var(--bg-hover)" />
+                            <path d="M14 8v8M10 12l4-4 4 4" stroke="var(--text-muted)" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M8 18h12" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                        <div
+                            style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">
+                            Upload your video</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Drag & drop or click · MP4, MOV · Max
+                            60 seconds</div>
+                    </div>
+                    <div id="upload-success" style="display:none; text-align:center;">
+                        <div style="font-size: 1.5rem; margin-bottom: 8px;">✓</div>
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--green);" id="upload-filename">
+                            Video uploaded</div>
+                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;" id="upload-size">
+                            Ready to go</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 12px; margin: 16px 0;">
+                    <div style="flex:1; height:1px; background:var(--border);"></div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">or</span>
+                    <div style="flex:1; height:1px; background:var(--border);"></div>
+                </div>
+
+                <button class="btn btn--ghost" id="record-btn"
+                    style="width:100%; justify-content:center; padding:12px;">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                        <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.2" />
+                        <circle cx="6.5" cy="6.5" r="2.5" fill="var(--red)" />
+                    </svg>
+                    Record now
+                </button>
+
+                <div
+                    style="margin-top: 24px; padding: 14px; background: var(--bg); border-radius: var(--r-lg); border: 1px solid var(--border);">
+                    <div
+                        style="font-size: 0.72rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px;">
+                        What makes a great 60-second pitch</div>
+                    <div
+                        style="display: flex; flex-direction: column; gap: 5px; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;">
+                        <span>— State the problem in your first 10 seconds</span>
+                        <span>— Explain your solution simply — no jargon</span>
+                        <span>— Say why you are the right person to build this</span>
+                        <span>— Don't dress it up. Raw and clear beats polished and vague.</span>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; margin-top:24px;">
+                    <button class="btn btn--primary" id="next-1">Continue →</button>
+                </div>
+            </div>
+
+            <!-- ── STEP 2: PITCH ── -->
+            <div class="step-panel" id="step-2">
+                <div style="margin-bottom: 20px;">
+                    <label class="form-label" for="problem-input">Problem <span
+                            style="font-size:0.65rem; color:var(--text-muted); font-weight:400; text-transform:none; letter-spacing:0;">(one
+                            sentence — be brutal)</span></label>
+                    <textarea id="problem-input" class="form-textarea" rows="2" maxlength="160"
+                        placeholder="Small businesses wait 47 days on average to get approved for a loan — and 60% are rejected without explanation."></textarea>
+                    <div class="char-count"><span id="prob-cnt">0</span>/160</div>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label class="form-label" for="solution-input">Solution <span
+                            style="font-size:0.65rem; color:var(--text-muted); font-weight:400; text-transform:none; letter-spacing:0;">(one
+                            sentence — be specific)</span></label>
+                    <textarea id="solution-input" class="form-textarea" rows="2" maxlength="160"
+                        placeholder="We underwrite SMB loans in 4 minutes using real-time cash flow data instead of credit scores."></textarea>
+                    <div class="char-count"><span id="sol-cnt">0</span>/160</div>
+                </div>
+                <div style="display:flex; justify-content:space-between; gap:10px;">
+                    <button class="btn btn--ghost" id="back-2">← Back</button>
+                    <button class="btn btn--primary" id="next-2">Continue →</button>
+                </div>
+            </div>
+
+            <!-- ── STEP 3: DETAILS ── -->
+            <div class="step-panel" id="step-3">
+                <div style="margin-bottom: 20px;">
+                    <label class="form-label">Stage</label>
+                    <div class="stage-grid" role="group" aria-label="Select your stage">
+                        <button class="stage-opt" data-stage="Idea" aria-pressed="false">💡 Idea</button>
+                        <button class="stage-opt" data-stage="Pre-seed" aria-pressed="false">🌱 Pre-seed</button>
+                        <button class="stage-opt" data-stage="Seed" aria-pressed="false">🚀 Seed</button>
+                        <button class="stage-opt" data-stage="Series A" aria-pressed="false">📈 Series A</button>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label class="form-label">Industry</label>
+                    <div class="ind-grid" role="group" aria-label="Select your industry">
+                        <button class="ind-opt" data-ind="AI/ML">AI / ML</button>
+                        <button class="ind-opt" data-ind="FinTech">FinTech</button>
+                        <button class="ind-opt" data-ind="HealthTech">HealthTech</button>
+                        <button class="ind-opt" data-ind="SaaS">SaaS</button>
+                        <button class="ind-opt" data-ind="CleanTech">CleanTech</button>
+                        <button class="ind-opt" data-ind="EdTech">EdTech</button>
+                        <button class="ind-opt" data-ind="Consumer">Consumer</button>
+                        <button class="ind-opt" data-ind="Marketplace">Marketplace</button>
+                        <button class="ind-opt" data-ind="Other">Other</button>
+                    </div>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label class="form-label" for="bio-input">One-line bio <span
+                            style="font-size:0.65rem; color:var(--text-muted); font-weight:400; text-transform:none; letter-spacing:0;">(optional)</span></label>
+                    <input id="bio-input" class="form-input" type="text" maxlength="120"
+                        placeholder="Ex-Stripe. Building the future of SMB lending." />
+                </div>
+                <div style="display:flex; justify-content:space-between; gap:10px;">
+                    <button class="btn btn--ghost" id="back-3">← Back</button>
+                    <button class="btn btn--primary" id="next-3">Review →</button>
+                </div>
+            </div>
+
+            <!-- ── STEP 4: REVIEW ── -->
+            <div class="step-panel" id="step-4">
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 16px;">This is what your
+                    pitch card will look like in the feed.</p>
+                <div class="review-card" aria-label="Pitch preview">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                        <div style="display:flex; align-items:center; gap:9px;">
+                            <div class="avatar" style="background:#e63312;" aria-hidden="true">YO</div>
+                            <div>
+                                <div style="font-size:0.83rem; font-weight:600;">You</div>
+                                <div style="display:flex; gap:5px; margin-top:2px; flex-wrap:wrap;">
+                                    <span class="tag" id="rv-industry"
+                                        style="font-size:0.68rem; color:var(--text-muted);">—</span>
+                                    <span class="tag tag-dot"
+                                        style="font-size:0.68rem; color:var(--text-muted);">·</span>
+                                    <span class="tag" id="rv-stage"
+                                        style="font-size:0.68rem; color:var(--text-muted);">—</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="score-badge" style="cursor:default;" aria-label="Pending AI score">
+                            <span class="score-badge__num" style="color:var(--text-muted); font-size:0.9rem;">—</span>
+                            <span class="score-badge__label">Pending</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <div class="pitch-problem-label">Problem</div>
+                        <p class="pitch-problem" id="rv-problem" style="color:var(--text-muted); font-style:italic;">
+                            Your problem statement will appear here.</p>
+                    </div>
+                    <div>
+                        <div class="pitch-solution-label">Solution</div>
+                        <p class="pitch-solution" id="rv-solution" style="color:var(--text-muted); font-style:italic;">
+                            Your solution will appear here.</p>
+                    </div>
+                </div>
+
+                <div
+                    style="margin-top:20px; padding:14px; background:var(--bg); border-radius:var(--r-lg); border:1px solid var(--border); font-size:0.78rem; color:var(--text-secondary); line-height:1.6;">
+                    Once you submit, AI will analyze your pitch in under 60 seconds. You'll get a score across 5
+                    dimensions plus a Fatal Flaw, Strongest Signal, and Investor's First Question.
+                </div>
+
+                <div style="display:flex; justify-content:space-between; gap:10px; margin-top:24px;">
+                    <button class="btn btn--ghost" id="back-4">← Back</button>
+                    <button class="btn btn--primary" id="go-live">Go live →</button>
+                </div>
+            </div>
+
+            <!-- ── ANALYZING ── -->
+            <div class="analyzing" id="analyzing" aria-live="polite" role="status">
+                <div class="analyzing-ring" aria-hidden="true"></div>
+                <div style="font-size:0.88rem; font-weight:600; margin-bottom:6px;">AI analyzing your pitch</div>
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:24px;">This takes about 60 seconds
+                </div>
+                <ul class="ai-step-list" id="ai-steps">
+                    <li class="ai-step active" id="ais-1"><span class="ai-step__dot"></span>Transcribing video…</li>
+                    <li class="ai-step" id="ais-2"><span class="ai-step__dot"></span>Analyzing problem clarity</li>
+                    <li class="ai-step" id="ais-3"><span class="ai-step__dot"></span>Estimating market size signal</li>
+                    <li class="ai-step" id="ais-4"><span class="ai-step__dot"></span>Scoring differentiation</li>
+                    <li class="ai-step" id="ais-5"><span class="ai-step__dot"></span>Evaluating founder–market fit</li>
+                </ul>
+            </div>
+
+            <!-- ── AI RESULT ── -->
+            <div class="ai-result" id="ai-result">
+                <div style="text-align:center; margin-bottom:28px;">
+                    <div
+                        style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); margin-bottom:8px;">
+                        Your AI Score</div>
+                    <div style="font-size:4rem; font-weight:800; font-family:var(--font-mono); color:var(--score-elite); letter-spacing:-0.04em; line-height:1;"
+                        id="result-score">84</div>
+                    <div style="font-size:0.78rem; color:var(--text-secondary); margin-top:4px;">Elite — YC-caliber
+                        signal</div>
+                </div>
+
+                <div style="margin-bottom:18px;">
+                    <div id="result-dims"></div>
+                </div>
+
+                <div class="insight insight--flaw" id="result-flaw"></div>
+                <div class="insight insight--signal" id="result-signal"></div>
+                <div class="insight insight--question" id="result-question"></div>
+
+                <div style="display:flex; gap:10px; margin-top:24px; flex-wrap:wrap;">
+                    <a href="index.html" class="btn btn--primary" style="flex:1; justify-content:center;">View in feed
+                        →</a>
+                    <a href="profile.html" class="btn btn--ghost" style="flex:1; justify-content:center;">See your
+                        profile</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let currentStep = 1;
+        let hasVideo = false;
+        let selectedStage = '';
+        let selectedIndustry = '';
+
+        const MOCK_SCORE = {
+            overall: 84,
+            clarity: 91, marketSize: 88, differentiation: 79, founderMarketFit: 85, conviction: 77,
+            fatalFlaw: 'Market size signal was understated — the 60 seconds didn\'t quantify the TAM, which is the first thing an investor asks about.',
+            strongestSignal: 'Founder-market fit. Ex-Stripe background builds instant credibility in the financial infrastructure space.',
+            investorQuestion: 'Who are the 3 data providers you use for real-time cash flow, and what happens if they cut off API access?'
+        };
+
+        const DIMS = [
+            { label: 'Clarity', key: 'clarity' }, { label: 'Market Size', key: 'marketSize' },
+            { label: 'Differentiation', key: 'differentiation' }, { label: 'Founder–Market Fit', key: 'founderMarketFit' },
+            { label: 'Conviction', key: 'conviction' }
+        ];
+
+        function scoreColor(s) {
+            if (s >= 85) return 'var(--score-elite)';
+            if (s >= 70) return 'var(--score-strong)';
+            if (s >= 55) return 'var(--score-mid)';
+            return 'var(--score-weak)';
+        }
+
+        function goToStep(n) {
+            document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+            const panel = document.getElementById(`step-${n}`);
+            if (panel) panel.classList.add('active');
+            // Progress dots
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(`ps-${i}`);
+                if (!el) continue;
+                el.classList.remove('active', 'done');
+                if (i < n) el.classList.add('done');
+                else if (i === n) el.classList.add('active');
+            }
+            currentStep = n;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Upload zone
+        const zone = document.getElementById('upload-zone');
+        const fileInput = document.getElementById('video-input');
+        zone.addEventListener('click', () => fileInput.click());
+        zone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--text-primary)'; });
+        zone.addEventListener('dragleave', () => zone.style.borderColor = '');
+        zone.addEventListener('drop', e => {
+            e.preventDefault(); zone.style.borderColor = '';
+            const f = e.dataTransfer.files[0];
+            if (f && f.type.startsWith('video/')) handleFile(f);
+        });
+        fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+        function handleFile(f) {
+            hasVideo = true;
+            document.getElementById('upload-idle').style.display = 'none';
+            document.getElementById('upload-success').style.display = 'block';
+            document.getElementById('upload-filename').textContent = f.name;
+            document.getElementById('upload-size').textContent = (f.size / (1024 * 1024)).toFixed(1) + ' MB';
+            zone.style.borderColor = 'var(--green)';
+            zone.style.borderStyle = 'solid';
+            zone.style.background = 'var(--green-light)';
+        }
+
+        document.getElementById('record-btn').addEventListener('click', () => {
+            hasVideo = true;
+            handleFile({ name: 'pitch-recording.webm', size: 8.2 * 1024 * 1024, type: 'video/webm' });
+            document.getElementById('upload-filename').textContent = 'Recording captured';
+            document.getElementById('upload-size').textContent = '✓ Ready';
+        });
+
+        document.getElementById('next-1').addEventListener('click', () => { goToStep(2); });
+        document.getElementById('back-2').addEventListener('click', () => goToStep(1));
+
+        // Char counters
+        document.getElementById('problem-input').addEventListener('input', function () {
+            document.getElementById('prob-cnt').textContent = this.value.length;
+        });
+        document.getElementById('solution-input').addEventListener('input', function () {
+            document.getElementById('sol-cnt').textContent = this.value.length;
+        });
+
+        document.getElementById('next-2').addEventListener('click', () => {
+            const prob = document.getElementById('problem-input').value.trim();
+            const sol = document.getElementById('solution-input').value.trim();
+            if (!prob || !sol) { alert('Please fill in both the problem and solution.'); return; }
+            goToStep(3);
+        });
+        document.getElementById('back-3').addEventListener('click', () => goToStep(2));
+
+        // Stage & industry
+        document.querySelectorAll('.stage-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.stage-opt').forEach(b => { b.classList.remove('sel'); b.setAttribute('aria-pressed', 'false'); });
+                btn.classList.add('sel'); btn.setAttribute('aria-pressed', 'true');
+                selectedStage = btn.dataset.stage;
+            });
+        });
+        document.querySelectorAll('.ind-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ind-opt').forEach(b => { b.classList.remove('sel'); b.setAttribute('aria-pressed', 'false'); });
+                btn.classList.add('sel'); btn.setAttribute('aria-pressed', 'true');
+                selectedIndustry = btn.dataset.ind;
+            });
+        });
+
+        document.getElementById('next-3').addEventListener('click', () => {
+            if (!selectedStage) { alert('Please select a stage.'); return; }
+            if (!selectedIndustry) { alert('Please select an industry.'); return; }
+            // Populate review
+            const prob = document.getElementById('problem-input').value;
+            const sol = document.getElementById('solution-input').value;
+            const rvProb = document.getElementById('rv-problem');
+            const rvSol = document.getElementById('rv-solution');
+            rvProb.textContent = prob || '—';
+            rvProb.style.color = prob ? '' : 'var(--text-muted)';
+            rvProb.style.fontStyle = prob ? '' : 'italic';
+            rvSol.textContent = sol || '—';
+            rvSol.style.color = sol ? '' : 'var(--text-muted)';
+            rvSol.style.fontStyle = sol ? '' : 'italic';
+            document.getElementById('rv-industry').textContent = selectedIndustry;
+            document.getElementById('rv-stage').textContent = selectedStage;
+            goToStep(4);
+        });
+        document.getElementById('back-4').addEventListener('click', () => goToStep(3));
+
+        document.getElementById('go-live').addEventListener('click', () => {
+            // Hide all steps
+            document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+            document.querySelector('.progress-steps').style.opacity = '0.4';
+
+            const analyzing = document.getElementById('analyzing');
+            analyzing.classList.add('visible');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const steps = ['ais-1', 'ais-2', 'ais-3', 'ais-4', 'ais-5'];
+            let idx = 0;
+
+            function nextAiStep() {
+                if (idx < steps.length) {
+                    if (idx > 0) {
+                        document.getElementById(steps[idx - 1]).classList.remove('active');
+                        document.getElementById(steps[idx - 1]).classList.add('done');
+                    }
+                    document.getElementById(steps[idx]).classList.add('active');
+                    idx++;
+                    setTimeout(nextAiStep, 1200);
+                } else {
+                    // Done
+                    document.getElementById(steps[steps.length - 1]).classList.remove('active');
+                    document.getElementById(steps[steps.length - 1]).classList.add('done');
+                    setTimeout(() => {
+                        analyzing.classList.remove('visible');
+                        showResult();
+                    }, 800);
+                }
+            }
+            nextAiStep();
+        });
+
+        function showResult() {
+            const result = document.getElementById('ai-result');
+            result.classList.add('visible');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const s = MOCK_SCORE;
+            document.getElementById('result-score').textContent = s.overall;
+            document.getElementById('result-score').style.color = scoreColor(s.overall);
+            document.getElementById('result-flaw').innerHTML = `<div class="insight__label">⚡ Fatal Flaw</div>${s.fatalFlaw}`;
+            document.getElementById('result-signal').innerHTML = `<div class="insight__label">✦ Strongest Signal</div>${s.strongestSignal}`;
+            document.getElementById('result-question').innerHTML = `<div class="insight__label">? Investor's First Question</div>${s.investorQuestion}`;
+
+            const dimsEl = document.getElementById('result-dims');
+            dimsEl.innerHTML = DIMS.map(d => {
+                const v = s[d.key];
+                return `<div class="score-dim">
+  <span class="score-dim__label">${d.label}</span>
+  <div class="score-dim__bar"><div class="score-dim__fill" style="width:0%; background:${scoreColor(v)};"></div></div>
+  <span class="score-dim__val" style="color:${scoreColor(v)};">${v}</span>
+</div>`;
+            }).join('');
+
+            setTimeout(() => {
+                dimsEl.querySelectorAll('.score-dim__fill').forEach((f, i) => {
+                    setTimeout(() => { f.style.width = MOCK_SCORE[DIMS[i].key] + '%'; }, i * 100);
+                });
+            }, 100);
+        }
+    </script>
+
+</body>
+
+</html>

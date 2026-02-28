@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Groundfloor — 60-Second Startup Pitches</title>
+  <meta name="description"
+    content="Any founder, anywhere. Pitch your idea in 60 seconds. AI-scored. Community-ranked. No gatekeeping." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23e63312'/><text x='50%' y='56%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui' font-weight='900' font-size='13' fill='white'>GF</text></svg>" />
+</head>
+
+<body>
+
+  <nav class="nav">
+    <div class="nav__inner">
+      <a class="nav__logo" href="index.html" aria-label="Groundfloor home">
+        <div class="nav__logo-mark" aria-hidden="true">GF</div>
+        Groundfloor
+      </a>
+      <div class="nav__links">
+        <a class="nav__link active" href="index.html">Feed</a>
+        <a class="nav__link" href="submit.html">Submit</a>
+        <a class="nav__link" href="profile.html">Profile</a>
+      </div>
+      <div class="nav__actions">
+        <button class="btn btn--ghost btn--sm" id="nav-signin">Sign in</button>
+        <a href="submit.html" class="btn btn--primary btn--sm">Submit a pitch</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+
+      <div class="hero__label">
+        <span class="live-dot" aria-hidden="true"></span>
+        Open to every founder
+      </div>
+
+      <h1 class="hero__title" id="hero-title">
+        Where startup ideas get<br />their <em>first real shot.</em>
+      </h1>
+
+      <p class="hero__sub">
+        Pitch your idea in 60 seconds. Get AI-scored across 5 dimensions. Hear from operators, investors, and customers
+        — no deck, no gatekeeping.
+      </p>
+
+      <div class="hero__ctas">
+        <a href="submit.html" class="btn btn--primary">Submit your pitch — it's free</a>
+        <button class="btn btn--ghost" id="hero-watch">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M3 2l8 4-8 4V2z" fill="currentColor" />
+          </svg>
+          See how it works
+        </button>
+      </div>
+
+      <div class="hero__feature-row" role="list" aria-label="How Groundfloor works">
+        <div class="hero__feature" role="listitem">
+          <div class="hero__feature-num">01</div>
+          <div class="hero__feature-label">Pitch in 60 seconds</div>
+          <div class="hero__feature-desc">Video + one sentence on your problem, one on your solution.</div>
+        </div>
+        <div class="hero__feature" role="listitem">
+          <div class="hero__feature-num">02</div>
+          <div class="hero__feature-label">AI scores it instantly</div>
+          <div class="hero__feature-desc">Clarity · Market · Differentiation · Fit · Conviction. Fatal Flaw included.
+          </div>
+        </div>
+        <div class="hero__feature" role="listitem">
+          <div class="hero__feature-num">03</div>
+          <div class="hero__feature-label">Community responds</div>
+          <div class="hero__feature-desc">Role-tagged feedback from founders, operators &amp; investors.</div>
+        </div>
+        <div class="hero__feature" role="listitem">
+          <div class="hero__feature-num"
+            style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); font-weight:600;">Live now
+          </div>
+          <div class="hero__feature-label">2,847 founders · 128 countries</div>
+          <div class="hero__feature-desc">No invite. No waitlist. Any founder, anywhere.</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- FEED + SIDEBAR -->
+    <div class="container">
+      <div class="feed-layout">
+
+        <!-- MAIN FEED -->
+        <div class="feed-main">
+          <!-- Tabs -->
+          <div class="feed-tabs" role="tablist" aria-label="Feed tabs">
+            <button class="feed-tab active" data-tab="today" role="tab" aria-selected="true" id="tab-today">
+              Today <span class="tab-count">—</span>
+            </button>
+            <button class="feed-tab" data-tab="rising" role="tab" aria-selected="false" id="tab-rising">
+              Rising <span class="tab-count">—</span>
+            </button>
+            <button class="feed-tab" data-tab="hof" role="tab" aria-selected="false" id="tab-hof">
+              Hall of Fame <span class="tab-count">—</span>
+            </button>
+            <div class="tab-reset" aria-live="polite">
+              <svg width="6" height="6" viewBox="0 0 6 6" aria-hidden="true">
+                <circle cx="3" cy="3" r="3" fill="#16a34a" />
+              </svg>
+              <span id="daily-countdown">—</span>
+            </div>
+          </div>
+
+          <!-- Filter chips -->
+          <div class="filter-bar" role="group" aria-label="Filter by industry">
+            <button class="chip active" data-industry="all" aria-pressed="true">All</button>
+            <button class="chip" data-industry="AI/ML" aria-pressed="false">AI / ML</button>
+            <button class="chip" data-industry="FinTech" aria-pressed="false">FinTech</button>
+            <button class="chip" data-industry="HealthTech" aria-pressed="false">HealthTech</button>
+            <button class="chip" data-industry="SaaS" aria-pressed="false">SaaS</button>
+            <button class="chip" data-industry="CleanTech" aria-pressed="false">CleanTech</button>
+            <button class="chip" data-industry="EdTech" aria-pressed="false">EdTech</button>
+            <button class="chip" data-industry="Consumer" aria-pressed="false">Consumer</button>
+            <button class="chip" data-industry="Marketplace" aria-pressed="false">Marketplace</button>
+          </div>
+
+          <!-- HOF Filters -->
+          <div class="hof-filters" id="hof-filters" style="display:none;"></div>
+
+          <!-- Pitch list -->
+          <div class="pitch-list" id="pitch-list" role="feed" aria-label="Startup pitches" aria-busy="false"></div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="feed-sidebar" aria-label="Sidebar">
+
+          <div class="sidebar-section">
+            <div class="sidebar-title">⚡ Weekly Drop</div>
+            <div id="weekly-drop-list" role="list" aria-label="Top pitches this week"></div>
+            <a href="submit.html" class="btn btn--ghost btn--sm"
+              style="width:100%; justify-content:center; margin-top:12px;">Get the weekly email →</a>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-title">About Groundfloor</div>
+            <p style="font-size:0.78rem; color:var(--text-secondary); line-height:1.65; margin-bottom:12px;">A living
+              feed of 60-second pitches. No deck, no connections, no gatekeeping. Just a founder with an idea.</p>
+            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.75rem; color:var(--text-secondary);">
+              <span>— No follower counts</span>
+              <span>— AI score is the equalizer</span>
+              <span>— Role-tagged community feedback</span>
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-title">AI Score Tiers</div>
+            <div class="score-tier"><span class="score-tier__val s-elite">85+</span><span
+                class="score-tier__label">Elite — YC-caliber signal</span></div>
+            <div class="score-tier"><span class="score-tier__val s-strong">70+</span><span
+                class="score-tier__label">Strong — Fundable idea</span></div>
+            <div class="score-tier"><span class="score-tier__val s-mid">55+</span><span class="score-tier__label">Mid —
+                Needs refinement</span></div>
+            <div class="score-tier"><span class="score-tier__val s-weak">&lt;55</span><span
+                class="score-tier__label">Early — Keep building</span></div>
+            <p style="font-size:0.7rem; color:var(--text-muted); margin-top:10px; line-height:1.55;">The score doesn't
+              care who you know or how many followers you have.</p>
+          </div>
+
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="nav__logo-mark" aria-hidden="true">GF</div>
+        <span style="font-weight:700; font-size:0.85rem;">Groundfloor</span>
+        <span style="color:var(--text-muted); font-size:0.75rem; margin-left:4px;">A living archive of founder
+          ambition.</span>
+      </div>
+      <div class="footer__links">
+        <a href="#">About</a>
+        <a href="#">How it works</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCORE / DETAIL MODAL -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title" id="modal-title">AI Score Breakdown</h2>
+        <button class="modal__close" id="modal-close" aria-label="Close">✕</button>
+      </div>
+      <div class="modal__body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/feed.js"></script>
+  <script>
+    // Sign in
+    document.getElementById('nav-signin').addEventListener('click', () => {
+      document.getElementById('modal-title').textContent = 'Join Groundfloor';
+      document.getElementById('modal-body').innerHTML = `
+      <div style="text-align:center; padding:8px 0 20px;">
+        <div class="nav__logo-mark" style="margin:0 auto 16px; width:40px; height:40px; font-size:0.85rem; border-radius:10px;"></div>
+        <h3 style="font-size:1rem; font-weight:700; margin-bottom:6px;">Create your account</h3>
+        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:24px;">Pitch your idea. Get AI-scored. Hear from real founders and investors.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn btn--secondary" style="justify-content:center; padding:11px;">Continue with Google</button>
+        <button class="btn btn--ghost" style="justify-content:center; padding:11px;">Continue with LinkedIn</button>
+      </div>
+      <p style="text-align:center; font-size:0.7rem; color:var(--text-muted); margin-top:16px;">By joining, you agree to our Terms and Privacy Policy.</p>
+    `;
+      openModal();
+    });
+
+    // Watch a pitch
+    document.getElementById('hero-watch').addEventListener('click', () => {
+      const p = window.GROUNDFLOOR_DATA?.PITCHES?.[0];
+      document.getElementById('modal-title').textContent = 'Example Pitch';
+      document.getElementById('modal-body').innerHTML = `
+      <div style="background:var(--bg); border:1px solid var(--border); border-radius:var(--r-lg); height:180px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; position:relative;">
+        <div style="width:40px; height:40px; border: 1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition: all 120ms;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 2l9 5-9 5V2z" fill="var(--text-primary)"/></svg>
+        </div>
+        <span style="position:absolute; bottom:10px; right:12px; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted);">0:52</span>
+      </div>
+      ${p ? `
+      <div style="margin-bottom:10px;">
+        <div style="font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-muted); margin-bottom:3px;">Problem</div>
+        <p style="font-size:0.85rem; font-weight:500; color:var(--text-primary);">${p.problem}</p>
+      </div>
+      <div>
+        <div style="font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--text-muted); margin-bottom:3px;">Solution</div>
+        <p style="font-size:0.8rem; color:var(--text-secondary);">${p.solution}</p>
+      </div>
+      ` : ''}
+      <a href="submit.html" class="btn btn--primary" style="width:100%; justify-content:center; margin-top:20px;">Submit your pitch →</a>
+    `;
+      openModal();
+    });
+
+    function openModal() {
+      document.getElementById('modal-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  </script>
+
+</body>
+
+</html>

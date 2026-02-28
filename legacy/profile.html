@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maya Chen · Groundfloor</title>
+    <meta name="description"
+        content="Maya Chen's founder profile on Groundfloor. Every pitch, every update, every piece of feedback." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles/main.css" />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23e63312'/><text x='50%' y='56%' dominant-baseline='middle' text-anchor='middle' font-family='system-ui' font-weight='900' font-size='13' fill='white'>GF</text></svg>" />
+</head>
+
+<body>
+
+    <nav class="nav">
+        <div class="nav__inner">
+            <a class="nav__logo" href="index.html">
+                <div class="nav__logo-mark">GF</div>
+                Groundfloor
+            </a>
+            <div class="nav__links">
+                <a class="nav__link" href="index.html">Feed</a>
+                <a class="nav__link" href="submit.html">Submit</a>
+                <a class="nav__link active" href="profile.html">Profile</a>
+            </div>
+            <div class="nav__actions">
+                <button class="btn btn--ghost btn--sm" id="follow-btn" aria-pressed="false">Follow</button>
+                <a href="submit.html" class="btn btn--primary btn--sm">Submit a pitch</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container" style="padding-bottom: 60px;">
+
+            <!-- PROFILE HEADER -->
+            <div class="profile-header">
+                <div class="profile-top">
+                    <div style="display:flex; align-items:flex-start; gap:16px;">
+                        <div class="avatar"
+                            style="width:56px; height:56px; font-size:1rem; font-weight:700; background:#e63312; margin-top:4px;"
+                            aria-label="Maya Chen's avatar">MC</div>
+                        <div>
+                            <h1 class="profile-name">Maya Chen</h1>
+                            <p class="profile-bio">Ex-Stripe. Building the future of SMB lending.</p>
+                            <p class="profile-loc">San Francisco, CA · Joined Jan 2025</p>
+                            <div class="profile-badges">
+                                <span class="badge badge--red">⚡ Weekly Drop</span>
+                                <span class="badge badge--green">✓ Verified Founder</span>
+                                <span class="badge">Top 5% Score</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="profile-stats" role="list" aria-label="Profile statistics">
+                    <div role="listitem">
+                        <div class="pstat__val">3</div>
+                        <div class="pstat__label">Pitches</div>
+                    </div>
+                    <div role="listitem">
+                        <div class="pstat__val s-elite">84</div>
+                        <div class="pstat__label">Avg Score</div>
+                    </div>
+                    <div role="listitem">
+                        <div class="pstat__val">412</div>
+                        <div class="pstat__label">Upvotes</div>
+                    </div>
+                    <div role="listitem">
+                        <div class="pstat__val">847</div>
+                        <div class="pstat__label">Followers</div>
+                    </div>
+                    <div role="listitem">
+                        <div class="pstat__val">6</div>
+                        <div class="pstat__label">Updates</div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="ptabs" role="tablist" aria-label="Profile sections">
+                    <button class="ptab active" data-ptab="pitches" role="tab" aria-selected="true">Pitches</button>
+                    <button class="ptab" data-ptab="updates" role="tab" aria-selected="false">
+                        Updates <span
+                            style="font-size:0.65rem; font-family:var(--font-mono); color:var(--text-muted);">6</span>
+                    </button>
+                    <button class="ptab" data-ptab="scores" role="tab" aria-selected="false">Score History</button>
+                    <button class="ptab" data-ptab="feedback" role="tab" aria-selected="false">Feedback</button>
+                </div>
+            </div>
+
+            <div style="padding-top: 24px;">
+
+                <!-- PANEL: PITCHES -->
+                <div class="ptab-panel active" id="pp-pitches">
+
+                    <div class="mini-card" tabindex="0" role="button" aria-label="View pitch: SMB Lending AI">
+                        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+                            <div style="flex:1; min-width:0;">
+                                <div
+                                    style="display:flex; align-items:center; gap:6px; margin-bottom:9px; flex-wrap:wrap;">
+                                    <span class="tag" style="font-size:0.68rem; color:var(--text-muted);">FinTech</span>
+                                    <span class="tag tag-dot"
+                                        style="font-size:0.68rem; color:var(--text-muted);">·</span>
+                                    <span class="tag"
+                                        style="font-size:0.68rem; color:var(--text-muted);">Pre-seed</span>
+                                    <span class="tag tag-dot"
+                                        style="font-size:0.68rem; color:var(--text-muted);">·</span>
+                                    <span class="tag" style="font-size:0.68rem; color:var(--text-muted);">Feb 24</span>
+                                    <span class="badge badge--red" style="font-size:0.58rem; padding:2px 6px;">⚡ Weekly
+                                        Drop #1</span>
+                                </div>
+                                <div class="pitch-problem-label">Problem</div>
+                                <p class="pitch-problem">Small businesses wait 47 days on average to get approved for a
+                                    loan — and 60% are rejected without explanation.</p>
+                                <div class="pitch-solution-label">Solution</div>
+                                <p class="pitch-solution">We underwrite SMB loans in 4 minutes using real-time cash flow
+                                    data instead of credit scores.</p>
+                            </div>
+                            <div class="score-badge" style="cursor:default; flex-shrink:0;">
+                                <span class="score-badge__num s-elite">84</span>
+                                <span class="score-badge__label">AI</span>
+                            </div>
+                        </div>
+                        <div class="pitch-actions" style="margin-top:12px;">
+                            <span class="act-btn" style="cursor:default; pointer-events:none;">↑ 247</span>
+                            <div class="act-sep"></div>
+                            <span class="act-btn" style="cursor:default; pointer-events:none;">💬 38</span>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" tabindex="0" role="button" aria-label="View pitch: Cash Flow Visibility">
+                        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+                            <div style="flex:1; min-width:0;">
+                                <div
+                                    style="display:flex; align-items:center; gap:6px; margin-bottom:9px; flex-wrap:wrap;">
+                                    <span class="tag" style="font-size:0.68rem; color:var(--text-muted);">FinTech</span>
+                                    <span class="tag tag-dot"
+                                        style="font-size:0.68rem; color:var(--text-muted);">·</span>
+                                    <span class="tag" style="font-size:0.68rem; color:var(--text-muted);">Idea</span>
+                                    <span class="tag tag-dot"
+                                        style="font-size:0.68rem; color:var(--text-muted);">·</span>
+                                    <span class="tag" style="font-size:0.68rem; color:var(--text-muted);">Nov
+                                        2024</span>
+                                </div>
+                                <div class="pitch-problem-label">Problem</div>
+                                <p class="pitch-problem">Restaurant owners have no real-time view of their cash position
+                                    across 4–6 different bank accounts and POS systems.</p>
+                                <div class="pitch-solution-label">Solution</div>
+                                <p class="pitch-solution">A single dashboard that aggregates all financial data and
+                                    predicts cash shortfalls 14 days out.</p>
+                            </div>
+                            <div class="score-badge" style="cursor:default; flex-shrink:0;">
+                                <span class="score-badge__num s-strong">71</span>
+                                <span class="score-badge__label">AI</span>
+                            </div>
+                        </div>
+                        <div class="pitch-actions" style="margin-top:12px;">
+                            <span class="act-btn" style="cursor:default; pointer-events:none;">↑ 89</span>
+                            <div class="act-sep"></div>
+                            <span class="act-btn" style="cursor:default; pointer-events:none;">💬 14</span>
+                        </div>
+                    </div>
+
+                    <div class="mini-card" style="opacity:0.5;" tabindex="0" aria-label="Archived pitch">
+                        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+                            <div style="flex:1;">
+                                <div
+                                    style="display:flex; align-items:center; gap:6px; margin-bottom:9px; flex-wrap:wrap;">
+                                    <span class="tag" style="font-size:0.68rem; color:var(--text-muted);">FinTech</span>
+                                    <span class="tag tag-dot"
+                                        style="font-size:0.68rem; color:var(--text-muted);">·</span>
+                                    <span class="tag" style="font-size:0.68rem; color:var(--text-muted);">Aug
+                                        2024</span>
+                                    <span
+                                        style="font-size:0.62rem; color:var(--text-muted); background:var(--bg); padding:2px 7px; border-radius:4px; border:1px solid var(--border);">Archived</span>
+                                </div>
+                                <p class="pitch-problem" style="margin-bottom:4px;">B2B payments API for sub-Saharan
+                                    African markets.</p>
+                                <p style="font-size:0.75rem; color:var(--text-muted); font-style:italic;">Pivoted —
+                                    regulatory moat too high, timing wrong.</p>
+                            </div>
+                            <div class="score-badge" style="cursor:default; flex-shrink:0; opacity:0.7;">
+                                <span class="score-badge__num s-mid">62</span>
+                                <span class="score-badge__label">AI</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PANEL: UPDATES -->
+                <div class="ptab-panel" id="pp-updates">
+                    <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.65;">
+                        Founders post 30-second updates monthly — what changed, what they learned, whether they pivoted
+                        or shut it down.</p>
+
+                    <div class="update-card">
+                        <div class="update-header">
+                            <span class="update-month">Feb 2025</span>
+                            <span class="update-tag tag--growth">📈 Growth</span>
+                        </div>
+                        <p class="update-text">Got into the Weekly Drop. 847 new followers in 72 hours. 12 VCs reached
+                            out directly from the pitch — mostly from the AI score surfacing us above founders with
+                            bigger audiences. First paid design partner signed. $500/mo. The market is real.</p>
+                        <div class="update-stats"><span>↑ 124</span><span>💬 31</span><span>👁 2,847 views</span></div>
+                    </div>
+
+                    <div class="update-card">
+                        <div class="update-header">
+                            <span class="update-month">Jan 2025</span>
+                            <span class="update-tag tag--pivot">🔄 Pivot</span>
+                        </div>
+                        <p class="update-text">The AI score called our fatal flaw perfectly: we needed the underwriting
+                            model to be the business, not a feature. Spent 3 weeks talking to 40 SMB owners. Changed
+                            go-to-market from API-first to direct. The fatal flaw feedback from a random operator in the
+                            comments turned out to be the insight that saved us 6 months.</p>
+                        <div class="update-stats"><span>↑ 87</span><span>💬 19</span></div>
+                    </div>
+
+                    <div class="update-card">
+                        <div class="update-header">
+                            <span class="update-month">Dec 2024</span>
+                            <span class="update-tag tag--lesson">💡 Lesson</span>
+                        </div>
+                        <p class="update-text">Submitted the pitch. Got an 84. I thought I'd get a 90+ because I'm
+                            obsessed with this problem. The AI knocked me for market size signal — I hadn't quantified
+                            the TAM in my 60 seconds. Arrogant mistake. The brutal feedback is the entire value. Do not
+                            submit here looking for validation. Submit here looking for truth.</p>
+                        <div class="update-stats"><span>↑ 203</span><span>💬 44</span></div>
+                    </div>
+
+                    <button class="btn btn--ghost" style="width:100%; justify-content:center; margin-top:8px;">Post
+                        30-second update</button>
+                </div>
+
+                <!-- PANEL: SCORE HISTORY -->
+                <div class="ptab-panel" id="pp-scores">
+                    <div style="margin-bottom:20px;">
+                        <div
+                            style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px;">
+                            <span style="font-size:0.82rem; font-weight:600;">AI Score trajectory</span>
+                            <span style="font-size:0.72rem; color:var(--green); font-family:var(--font-mono);">+22 pts
+                                in 6 months</span>
+                        </div>
+                        <p style="font-size:0.75rem; color:var(--text-muted);">Improvement signals learning. Plateau
+                            signals a rut.</p>
+                    </div>
+
+                    <div style="border:1px solid var(--border); border-radius:var(--r-lg); padding:20px;">
+                        <div class="score-bars" style="margin-bottom:20px;" aria-label="Score history chart">
+                            <div class="sbar" style="height:62%;" title="Aug 2024 · 62"><span
+                                    class="sbar-tip">Aug</span></div>
+                            <div class="sbar" style="height:68%; background:var(--bg-hover);" title="Sep · 68"><span
+                                    class="sbar-tip">Sep</span></div>
+                            <div class="sbar" style="height:71%; background:var(--bg-hover);" title="Oct · 71"><span
+                                    class="sbar-tip">Oct</span></div>
+                            <div class="sbar" style="height:75%; background:#dbeafe;" title="Nov · 75"><span
+                                    class="sbar-tip">Nov</span></div>
+                            <div class="sbar" style="height:80%; background:#bfdbfe;" title="Dec · 80"><span
+                                    class="sbar-tip">Dec</span></div>
+                            <div class="sbar" style="height:84%; background:#bbf7d0;" title="Feb 2025 · 84"><span
+                                    class="sbar-tip">Feb</span></div>
+                        </div>
+
+                        <div
+                            style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px; padding-top:16px; border-top:1px solid var(--border);">
+                            <div style="text-align:center;">
+                                <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">Clarity
+                                </div>
+                                <div class="pstat__val s-elite" style="font-size:0.88rem;">91</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">Market</div>
+                                <div class="pstat__val s-strong" style="font-size:0.88rem;">88</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">Diff.</div>
+                                <div class="pstat__val s-strong" style="font-size:0.88rem;">79</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">FM-Fit</div>
+                                <div class="pstat__val s-elite" style="font-size:0.88rem;">85</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:0.65rem; color:var(--text-muted); margin-bottom:3px;">Conv.</div>
+                                <div class="pstat__val s-mid" style="font-size:0.88rem;">77</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insight insight--signal" style="margin-top:16px;">
+                        <div class="insight__label">✦ AI Trajectory Note</div>
+                        Clarity is in the top 8% on the platform. Conviction is the remaining unlock — pitches that
+                        score 90+ don't hedge.
+                    </div>
+                </div>
+
+                <!-- PANEL: FEEDBACK -->
+                <div class="ptab-panel" id="pp-feedback">
+                    <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.65;">All
+                        public feedback received across pitches, tagged by viewer role.</p>
+
+                    <div class="comment">
+                        <div class="avatar avatar--sm" style="background:#d97706;">MT</div>
+                        <div class="comment__body">
+                            <div class="comment__header">
+                                <span class="comment__author">Morgan T.</span>
+                                <span class="role-pill"
+                                    style="background:#d9770618; color:#d97706; border-color:#d9770630;">Investor</span>
+                                <span class="comment__time">2h ago</span>
+                            </div>
+                            <p class="comment__text">Have seen 3 companies attempt this. The underwriting model is the
+                                entire business — what data providers are you using?</p>
+                        </div>
+                    </div>
+
+                    <div class="comment">
+                        <div class="avatar avatar--sm" style="background:#e85d04;">RS</div>
+                        <div class="comment__body">
+                            <div class="comment__header">
+                                <span class="comment__author">Rachel S.</span>
+                                <span class="role-pill"
+                                    style="background:#e85d0418; color:#e85d04; border-color:#e85d0430;">Operator</span>
+                                <span class="comment__time">45m ago</span>
+                            </div>
+                            <p class="comment__text">Built credit models at Capital One for 6 years. The hardest part is
+                                not the underwriting, it's fraud at the top of the funnel. How are you handling identity
+                                verification?</p>
+                        </div>
+                    </div>
+
+                    <div class="comment">
+                        <div class="avatar avatar--sm" style="background:#16a34a;">DK</div>
+                        <div class="comment__body">
+                            <div class="comment__header">
+                                <span class="comment__author">Dave K.</span>
+                                <span class="role-pill"
+                                    style="background:#16a34a18; color:#16a34a; border-color:#16a34a30;">Potential
+                                    Customer</span>
+                                <span class="comment__time">30m ago</span>
+                            </div>
+                            <p class="comment__text">I own 3 restaurants. I would literally sign up today. The 47-day
+                                wait is killing us.</p>
+                        </div>
+                    </div>
+
+                    <div class="comment">
+                        <div class="avatar avatar--sm" style="background:#a855f7;">AP</div>
+                        <div class="comment__body">
+                            <div class="comment__header">
+                                <span class="comment__author">Anjali P.</span>
+                                <span class="role-pill"
+                                    style="background:#a855f718; color:#a855f7; border-color:#a855f730;">Founder</span>
+                                <span class="comment__time">15m ago</span>
+                            </div>
+                            <p class="comment__text">How are you thinking about geographic expansion? US regulatory
+                                environment for lending is a nightmare state-by-state.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <div class="nav__logo-mark">GF</div>
+                <span style="font-weight:700; font-size:0.85rem;">Groundfloor</span>
+            </div>
+            <div class="footer__links">
+                <a href="#">About</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.ptab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.ptab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+                document.querySelectorAll('.ptab-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                document.getElementById(`pp-${tab.dataset.ptab}`).classList.add('active');
+            });
+        });
+
+        // Follow toggle
+        const followBtn = document.getElementById('follow-btn');
+        let following = false;
+        followBtn.addEventListener('click', () => {
+            following = !following;
+            followBtn.setAttribute('aria-pressed', following.toString());
+            followBtn.textContent = following ? 'Following ✓' : 'Follow';
+            followBtn.classList.toggle('btn--ghost', !following);
+            if (following) {
+                followBtn.style.background = 'var(--green-light)';
+                followBtn.style.color = 'var(--green)';
+                followBtn.style.borderColor = '#bbf7d0';
+            } else {
+                followBtn.style.background = '';
+                followBtn.style.color = '';
+                followBtn.style.borderColor = '';
+            }
+        });
+    </script>
+
+</body>
+
+</html>
