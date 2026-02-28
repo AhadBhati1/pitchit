@@ -2,14 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { Pitch } from '@/app/page'
+import type { Pitch } from '@/types'
 import VoteButton from './VoteButton'
 
-export default function PitchCard({ 
-  pitch, 
+export default function PitchCard({
+  pitch,
   index,
-  currentUser 
-}: { 
+  currentUser
+}: {
   pitch: Pitch
   index: number
   currentUser?: string
@@ -52,10 +52,10 @@ export default function PitchCard({
 
         {pitch.video_url && (
           <div style={{ marginTop: '16px', borderRadius: 'var(--r-md)', overflow: 'hidden', background: '#000' }}>
-            <video 
-              src={pitch.video_url} 
+            <video
+              src={pitch.video_url}
               poster={pitch.thumbnail_url || undefined}
-              controls 
+              controls
               preload="none"
               style={{ width: '100%', maxHeight: '380px', display: 'block' }}
             />
@@ -63,16 +63,16 @@ export default function PitchCard({
         )}
 
         <div className="pitch-actions">
-          <VoteButton 
-            pitchId={pitch.id} 
-            initialVotes={pitch.upvotes} 
-            initialHasVoted={pitch.has_voted} 
-            isLoggedIn={!!currentUser} 
+          <VoteButton
+            pitchId={pitch.id}
+            initialVotes={pitch.upvotes}
+            initialHasVoted={pitch.has_voted}
+            isLoggedIn={!!currentUser}
           />
           <div className="act-sep" aria-hidden="true"></div>
           <button className="act-btn" aria-label={`${pitch.comments} comments`}>
             <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
-              <path d="M9 1H2C1.4 1 1 1.4 1 2v6c0 .6.4 1 1 1h2l2 2 2-2h1c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" fill="none"/>
+              <path d="M9 1H2C1.4 1 1 1.4 1 2v6c0 .6.4 1 1 1h2l2 2 2-2h1c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" fill="none" />
             </svg>
             {pitch.comments}
           </button>

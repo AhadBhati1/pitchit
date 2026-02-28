@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import PitchCard from '@/components/PitchCard'
-import type { Pitch } from '@/app/page'
+import type { Pitch } from '@/types'
 
 export default async function ProfilePage({
   params,
@@ -58,7 +58,7 @@ export default async function ProfilePage({
         </div>
         <h1 className="profile-name">{profile?.name || 'Anonymous Founder'}</h1>
         <p className="profile-bio">{profile?.bio || 'Building something new.'}</p>
-        
+
         <div className="profile-stats">
           <div className="profile-stat">
             <div className="profile-stat-val">{formattedPitches.length}</div>
