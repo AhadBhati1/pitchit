@@ -6,6 +6,25 @@ import PitchCard from '@/components/PitchCard'
 import Link from 'next/link'
 import VoteButton from '@/components/VoteButton'
 
+export interface Pitch {
+  id: string
+  created_at: string
+  problem: string
+  solution: string
+  video_url: string
+  industry: string
+  stage: string
+  user_id: string
+  upvotes: number
+  comments: number
+  has_voted: boolean
+  profiles: {
+    name: string
+    avatar_url: string | null
+    bio: string | null
+  }
+}
+
 export default function Home() {
   const [viewMode, setViewMode] = useState<'classic' | 'elevator'>('classic')
   const [pitches, setPitches] = useState<any[]>([])
@@ -78,7 +97,7 @@ export default function Home() {
                   loop
                   playsInline
                 />
-                
+
                 <div className="elevator-overlay">
                   <div className="elevator-info">
                     <div className="elevator-founder">
@@ -132,7 +151,7 @@ export default function Home() {
         <div className="hero__ctas">
           <Link href="/submit" className="btn btn--primary">Submit your pitch — it&apos;s free</Link>
           <button className="btn btn--ghost" onClick={() => setViewMode('elevator')}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style={{marginRight: '6px'}}><path d="M3 2l8 4-8 4V2z" fill="currentColor"/></svg>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" style={{ marginRight: '6px' }}><path d="M3 2l8 4-8 4V2z" fill="currentColor" /></svg>
             Watch Pitches
           </button>
         </div>
