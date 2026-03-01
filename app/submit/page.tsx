@@ -1,13 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import VideoUploader from '@/components/VideoUploader'
+import { createClient } from '@/utils/supabase/client'
 
 export default function SubmitPage() {
   const router = useRouter()
+  const [user, setUser] = useState<any>(null)
+  const [checkingAuth, setCheckingAuth] = useState(true)
   const [step, setStep] = useState(1)
-  
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user)
+      setCheckingAuth(false)
+    })
+  }, [])
+
   // Form State
   const [videoUrl, setVideoUrl] = useState('')
   const [thumbnailUrl, setThumbnailUrl] = useState('')
@@ -73,6 +84,24 @@ export default function SubmitPage() {
     }
   }
 
+  if (checkingAuth) {
+    return <div style={{ padding: '100px', textAlign: 'center', color: 'var(--text-muted)' }}>Checking authorization...</div>
+  }
+
+  if (!user) {
+    return (
+      <div className="container container--sm" style={{ padding: '100px 24px', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '12px' }}>Authentication Required</h1>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '0.9rem' }}>
+          Please sign in with Google to submit your 60-second pitch.
+        </p>
+        <button onClick={() => router.push('/login')} className="btn btn--primary">
+          Sign in to Continue
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="container container--sm" style={{ padding: '48px 24px 80px' }}>
       <div style={{ marginBottom: '36px' }}>
@@ -126,8 +155,8 @@ export default function SubmitPage() {
       <div className={`step-panel ${step === 2 ? 'active' : ''}`}>
         <div style={{ marginBottom: '20px' }}>
           <label className="form-label">Problem <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(one sentence — be brutal)</span></label>
-          <textarea 
-            className="form-textarea" rows={2} maxLength={160} 
+          <textarea
+            className="form-textarea" rows={2} maxLength={160}
             placeholder="Small businesses wait 47 days on average to get approved for a loan."
             value={problem} onChange={e => setProblem(e.target.value)}
           />
@@ -135,8 +164,8 @@ export default function SubmitPage() {
         </div>
         <div style={{ marginBottom: '24px' }}>
           <label className="form-label">Solution <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(one sentence — be specific)</span></label>
-          <textarea 
-            className="form-textarea" rows={2} maxLength={160} 
+          <textarea
+            className="form-textarea" rows={2} maxLength={160}
             placeholder="We underwrite SMB loans in 4 minutes using real-time cash flow data instead of credit scores."
             value={solution} onChange={e => setSolution(e.target.value)}
           />
@@ -172,9 +201,9 @@ export default function SubmitPage() {
         </div>
         <div style={{ marginBottom: '24px' }}>
           <label className="form-label">One-line bio <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional)</span></label>
-          <input 
-            className="form-input" type="text" maxLength={120} 
-            placeholder="Ex-Stripe. Building the future of SMB lending." 
+          <input
+            className="form-input" type="text" maxLength={120}
+            placeholder="Ex-Stripe. Building the future of SMB lending."
             value={bio} onChange={e => setBio(e.target.value)}
           />
         </div>
@@ -190,9 +219,11 @@ export default function SubmitPage() {
         <div style={{ border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', padding: '16px 18px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
-              <div className="avatar" style={{ background: '#e63312' }} aria-hidden="true">U</div>
+              <div className="avatar" style={{ background: '#e63312' }} aria-hidden="true">
+                {user?.user_metadata?.full_name?.[0] || user?.email?.[0]?.toUpperCase() || 'U'}
+              </div>
               <div>
-                <div style={{ fontSize: '0.83rem', fontWeight: 600 }}>You</div>
+                <div style={{ fontSize: '0.83rem', fontWeight: 600 }}>{user?.user_metadata?.full_name || 'You'}</div>
                 <div style={{ display: 'flex', gap: '5px', marginTop: '2px', flexWrap: 'wrap' }}>
                   <span className="tag" style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{industry || '—'}</span>
                   <span className="tag tag-dot" style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>·</span>
