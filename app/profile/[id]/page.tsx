@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import PitchCard from '@/components/PitchCard'
 import type { Pitch } from '@/types'
+import ProfileActions from '@/components/ProfileActions'
 
 export default async function ProfilePage({
   params,
@@ -30,12 +31,12 @@ export default async function ProfilePage({
     .eq('user_id', id)
     .order('created_at', { ascending: false })
 
-  const formattedPitches = pitches?.map(p => ({
+  const formattedPitches = (pitches || []).map((p: any) => ({
     ...p,
-    upvotes: p.votes[0]?.count || 0,
-    comments: p.comments[0]?.count || 0,
+    upvotes: p.votes?.[0]?.count || 0,
+    comments: p.comments?.[0]?.count || 0,
     has_voted: false
-  })) as Pitch[] || []
+  })) as Pitch[]
 
   // Check if this is the current logged-in user viewing their own profile
   const isOwner = user?.id === id
@@ -50,13 +51,20 @@ export default async function ProfilePage({
             {initial}
           </div>
           <div className="profile-header__actions">
-            {isOwner && (
-              <button className="btn btn--ghost btn--sm">Edit Profile</button>
+            {isOwner ? (
+              <ProfileActions profile={profile} />
+            ) : (
+              <button className="btn btn--secondary btn--sm">Share</button>
             )}
-            <button className="btn btn--secondary btn--sm">Share</button>
           </div>
         </div>
         <h1 className="profile-name">{profile?.name || 'Anonymous Founder'}</h1>
+        {profile?.location && (
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            {profile.location}
+          </div>
+        )}
         <p className="profile-bio">{profile?.bio || 'Building something new.'}</p>
 
         <div className="profile-stats">

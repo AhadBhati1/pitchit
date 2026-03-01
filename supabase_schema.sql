@@ -51,6 +51,7 @@ alter table public.comments enable row level security;
 create policy "Public profiles are viewable by everyone." on public.profiles for select using (true);
 create policy "Users can insert their own profile." on public.profiles for insert with check (auth.uid() = id);
 create policy "Users can update own profile." on public.profiles for update using (auth.uid() = id);
+create policy "Users can delete own profile." on public.profiles for delete using (auth.uid() = id);
 
 create policy "Pitches are viewable by everyone." on public.pitches for select using (true);
 create policy "Anyone can insert pitches for frictionless MVP." on public.pitches for insert with check (true);
