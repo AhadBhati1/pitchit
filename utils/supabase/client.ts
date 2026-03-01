@@ -14,7 +14,8 @@ export function createClient() {
 
   // Use proxy in production to bypass India ISP blocks
   const isProd = process.env.NODE_ENV === 'production'
-  const finalUrl = isProd ? `${window.location.origin}/supabase` : url
+  const isBrowser = typeof window !== 'undefined'
+  const finalUrl = (isProd && isBrowser) ? `${window.location.origin}/supabase` : url
 
   return createBrowserClient(finalUrl, anonKey)
 }
