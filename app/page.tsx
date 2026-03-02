@@ -84,49 +84,76 @@ export default function Home() {
         ) : (
           pitches.map((pitch) => (
             <div key={pitch.id} className="elevator-item">
-              <div className="elevator-video-container">
-                <video
-                  src={pitch.video_url}
-                  className="elevator-video"
-                  autoPlay
-                  muted={isMuted}
-                  loop
-                  playsInline
-                />
-
-                <div className="elevator-overlay">
-                  <div className="elevator-info">
-                    <div className="elevator-founder">
-                      <div className="avatar avatar--sm" style={{ background: 'var(--red)' }}>
-                        {(pitch.profiles?.name || 'A')[0]}
-                      </div>
-                      <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{pitch.profiles?.name || 'Anonymous'}</span>
-                    </div>
-                    <p style={{ fontSize: '0.85rem', marginBottom: '4px', fontWeight: 600 }}>{pitch.problem}</p>
-                    <p style={{ fontSize: '0.8rem', opacity: 0.9 }}>{pitch.solution}</p>
-                  </div>
-                </div>
-
-                <div className="elevator-actions">
-                  <div className="elevator-action-btn">
-                    <VoteButton
-                      pitchId={pitch.id}
-                      initialVotes={pitch.upvotes}
-                      initialHasVoted={false}
-                      isLoggedIn={!!user}
-                    />
-                  </div>
-                  <div className="elevator-action-btn">
-                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-                    </div>
-                    <span>{pitch.comments}</span>
-                  </div>
-                </div>
-              </div>
+              <ElevatorVideo
+                src={pitch.video_url}
+                isMuted={isMuted}
+                pitch={pitch}
+                isLoggedIn={!!user}
+              />
             </div>
           ))
         )}
+      </div>
+    )
+  }
+
+  function ElevatorVideo({ src, isMuted, pitch, isLoggedIn }: { src: string, isMuted: boolean, pitch: any, isLoggedIn: boolean }) {
+    const videoRef = (el: HTMLVideoElement | null) => {
+      if (!el) return
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            el.play().catch(e => console.error("Play error:", e))
+          } else {
+            el.pause()
+          }
+        })
+      }, { threshold: 0.6 })
+
+      observer.observe(el)
+    }
+
+    return (
+      <div className="elevator-video-container">
+        <video
+          ref={videoRef}
+          src={src}
+          className="elevator-video"
+          loop
+          playsInline
+          muted={isMuted}
+        />
+
+        <div className="elevator-overlay">
+          <div className="elevator-info">
+            <div className="elevator-founder">
+              <div className="avatar avatar--sm" style={{ background: 'var(--red)' }}>
+                {(pitch.profiles?.name || 'A')[0]}
+              </div>
+              <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>{pitch.profiles?.name || 'Anonymous'}</span>
+            </div>
+            <p style={{ fontSize: '0.85rem', marginBottom: '4px', fontWeight: 600 }}>{pitch.problem}</p>
+            <p style={{ fontSize: '0.8rem', opacity: 0.9 }}>{pitch.solution}</p>
+          </div>
+        </div>
+
+        <div className="elevator-actions">
+          <div className="elevator-action-btn">
+            <VoteButton
+              pitchId={pitch.id}
+              initialVotes={pitch.upvotes}
+              initialHasVoted={false}
+              isLoggedIn={isLoggedIn}
+            />
+          </div>
+          <div className="elevator-action-btn">
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+            </div>
+            <span>{pitch.comments}</span>
+          </div>
+        </div>
       </div>
     )
   }

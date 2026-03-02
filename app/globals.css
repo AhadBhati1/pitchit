@@ -1988,6 +1988,34 @@ img {
 }
 
 /* ── ELEVATOR MUTE TOGGLE ────────────────────────────────────── */
+.elevator-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  z-index: 2200;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+}
+
+.elevator-container::-webkit-scrollbar {
+  display: none;
+}
+
+.elevator-item {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
 .elevator-mute-toggle {
   position: fixed;
   top: 24px;
