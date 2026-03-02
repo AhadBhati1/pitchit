@@ -30,8 +30,11 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
     const subPath = path.join('/')
     const targetUrl = `${supabaseUrl}/${subPath}${searchParams ? `?${searchParams}` : ''}`
 
+    // Clone headers and remove problematic ones
     const headers = new Headers(request.headers)
-    headers.delete('host') // Let the fetch set the correct host
+    headers.delete('host')
+    headers.delete('connection')
+    headers.delete('content-length')
 
     try {
         const body = ['GET', 'HEAD'].includes(request.method) ? undefined : await request.arrayBuffer()
@@ -40,10 +43,10 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
             method: request.method,
             headers: headers,
             body: body,
-            redirect: 'manual', // Important for OAuth redirects
+            redirect: 'manual',
         })
 
-        // Handle redirects (like OAuth)
+        // Handle redirects (OAuth)
         if (response.status >= 300 && response.status < 400) {
             const location = response.headers.get('location')
             if (location) {
@@ -52,9 +55,17 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
         }
 
         const responseData = await response.arrayBuffer()
-        const responseHeaders = new Headers(response.headers)
+        const responseHeaders = new Headers()
 
-        // Fix CORS and other headers if needed, but mostly pass through
+        // Explicitly pass through critical headers like Set-Cookie
+        response.headers.forEach((value, key) => {
+            if (key.toLowerCase() === 'set-cookie' || key.toLowerCase() === 'content-type') {
+                responseHeaders.append(key, value)
+            } else {
+                responseHeaders.set(key, value)
+            }
+        })
+
         return new NextResponse(responseData, {
             status: response.status,
             headers: responseHeaders,
