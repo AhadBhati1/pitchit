@@ -11,7 +11,7 @@ export default function DiagnosticsPage() {
             NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'Set ✅' : 'Missing ❌',
             NODE_ENV: process.env.NODE_ENV,
             origin: window.location.origin,
-            is_india_proxy_target: window.location.origin + '/supabase'
+            is_india_proxy_target: window.location.origin + '/api/supabase'
         })
     }, [])
 
