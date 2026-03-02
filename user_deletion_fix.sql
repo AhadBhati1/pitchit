@@ -1,8 +1,6 @@
--- RUN THIS IN YOUR SUPABASE SQL EDITOR TO FIX USER DELETION ERRORS
--- This script adds "ON DELETE CASCADE" to your foreign keys, 
--- allowing you to delete users from the Auth dashboard without database errors.
+-- RUN THIS IN YOUR SUPABASE SQL EDITOR TO FIX DATA FETCHING & DELETION ERRORS
 
--- 1. FIX PROFILES TABLE
+-- 1. FIX PROFILES TABLE (Ensure it links to Auth)
 ALTER TABLE public.profiles
 DROP CONSTRAINT IF EXISTS profiles_id_fkey,
 ADD CONSTRAINT profiles_id_fkey 
@@ -10,12 +8,12 @@ ADD CONSTRAINT profiles_id_fkey
   REFERENCES auth.users(id) 
   ON DELETE CASCADE;
 
--- 2. FIX PITCHES TABLE
+-- 2. FIX PITCHES TABLE (Link directly to Profiles for easy joins)
 ALTER TABLE public.pitches
 DROP CONSTRAINT IF EXISTS pitches_user_id_fkey,
 ADD CONSTRAINT pitches_user_id_fkey 
   FOREIGN KEY (user_id) 
-  REFERENCES auth.users(id) 
+  REFERENCES public.profiles(id) 
   ON DELETE CASCADE;
 
 -- 3. FIX VOTES TABLE
@@ -35,4 +33,4 @@ ADD CONSTRAINT comments_user_id_fkey
   ON DELETE CASCADE;
 
 -- Success message
-SELECT 'Foreign keys updated to ON DELETE CASCADE' as status;
+SELECT 'Relationships updated to support joins and cascade deletes' as status;
