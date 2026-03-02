@@ -54,10 +54,10 @@ export default function RootLayout({
               </span>
             </div>
             <div className="footer__links">
-              <a href="#">About</a>
-              <a href="#">How it works</a>
-              <a href="#">Privacy</a>
-              <a href="#">Terms</a>
+              <Link href="/info?tab=about">About</Link>
+              <Link href="/info?tab=how-it-works">How it works</Link>
+              <Link href="/info?tab=privacy">Privacy</Link>
+              <Link href="/info?tab=terms">Terms</Link>
             </div>
           </div>
         </footer>
