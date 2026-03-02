@@ -29,7 +29,7 @@ export default function DiagnosticsPage() {
             <p><b>Current Mode:</b> {env.NODE_ENV}</p>
             <p><b>India Proxy URL:</b> {env.is_india_proxy_target}</p>
             <hr />
-            <p style={{ color: 'var(--text-muted)' }}>If the variables above say "Missing", you must add them to your Vercel Project Settings > Environment Variables.</p>
+            <p style={{ color: 'var(--text-muted)' }}>If the variables above say "Missing", you must add them to your Vercel Project Settings &gt; Environment Variables.</p>
         </div>
     )
 }
