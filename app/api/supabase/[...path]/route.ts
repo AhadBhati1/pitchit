@@ -58,8 +58,18 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
         const responseHeaders = new Headers()
 
         // Explicitly pass through critical headers like Set-Cookie
+        // But STRIP encoding headers because fetch/Next.js might have already decoded the body
         response.headers.forEach((value, key) => {
-            if (key.toLowerCase() === 'set-cookie' || key.toLowerCase() === 'content-type') {
+            const lowerKey = key.toLowerCase()
+            if (
+                lowerKey === 'content-encoding' ||
+                lowerKey === 'transfer-encoding' ||
+                lowerKey === 'content-length'
+            ) {
+                return
+            }
+
+            if (lowerKey === 'set-cookie') {
                 responseHeaders.append(key, value)
             } else {
                 responseHeaders.set(key, value)
