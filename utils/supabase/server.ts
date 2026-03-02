@@ -19,6 +19,12 @@ export async function createClient() {
     url,
     anonKey,
     {
+      auth: {
+        storageKey: 'gf-auth-token',
+      },
+      cookieOptions: {
+        name: 'gf-auth-token',
+      },
       cookies: {
         getAll() {
           return cookieStore.getAll()

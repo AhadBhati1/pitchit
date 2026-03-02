@@ -17,6 +17,12 @@ export async function middleware(request: NextRequest) {
     url,
     anonKey,
     {
+      auth: {
+        storageKey: 'gf-auth-token',
+      },
+      cookieOptions: {
+        name: 'gf-auth-token',
+      },
       cookies: {
         getAll() {
           return request.cookies.getAll()

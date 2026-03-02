@@ -16,5 +16,12 @@ export function createClient() {
 
   const finalAnonKey = anonKey || 'placeholder'
 
-  return createBrowserClient(finalUrl, finalAnonKey)
+  return createBrowserClient(finalUrl, finalAnonKey, {
+    auth: {
+      storageKey: 'gf-auth-token',
+    },
+    cookieOptions: {
+      name: 'gf-auth-token',
+    }
+  })
 }
