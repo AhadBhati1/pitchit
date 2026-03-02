@@ -12,6 +12,7 @@ export default function Home() {
   const [pitches, setPitches] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
+  const [isMuted, setIsMuted] = useState(true)
 
   useEffect(() => {
     async function fetchData() {
@@ -52,8 +53,6 @@ export default function Home() {
   if (loading) {
     return <div style={{ padding: '100px', textAlign: 'center', color: 'var(--text-muted)' }}>Loading feed...</div>
   }
-
-  const [isMuted, setIsMuted] = useState(true)
 
   if (viewMode === 'elevator') {
     return (
