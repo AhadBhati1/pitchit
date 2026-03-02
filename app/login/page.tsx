@@ -1,10 +1,10 @@
 'use client'
 
 import { createClient } from '@/utils/supabase/client'
-import { useState, useEffect } from 'react'
+import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const message = searchParams.get('message')
@@ -71,5 +71,17 @@ export default function LoginPage() {
         By joining, you agree to our Terms and Privacy Policy.
       </p>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="container container--sm" style={{ padding: '80px 24px', textAlign: 'center' }}>
+        <p style={{ color: 'var(--text-muted)' }}>Loading login...</p>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   )
 }
