@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../app/globals.css";
 import Nav from "@/components/Nav";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Groundfloor — 60-Second Startup Pitches",
