@@ -11,12 +11,21 @@ export default function Nav() {
   const supabase = createClient();
 
   useEffect(() => {
-    async function getSession() {
-      const { data: { user } } = await supabase.auth.getUser();
+    // Initial user fetch
+    supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
-    }
-    getSession();
-  }, [supabase]);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (_event === 'SIGNED_IN') {
+        router.refresh();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase, router]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();

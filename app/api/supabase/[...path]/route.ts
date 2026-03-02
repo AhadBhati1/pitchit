@@ -59,6 +59,7 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
 
         // Explicitly pass through critical headers like Set-Cookie
         // But STRIP encoding headers because fetch/Next.js might have already decoded the body
+        // AND rewrite Domain/Path in Set-Cookie to match the current domain
         response.headers.forEach((value, key) => {
             const lowerKey = key.toLowerCase()
             if (
@@ -70,7 +71,10 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
             }
 
             if (lowerKey === 'set-cookie') {
-                responseHeaders.append(key, value)
+                // Rewrite Supabase domain to the current site domain
+                let newValue = value.replace(/Domain=[^; ]+;?/gi, '')
+                newValue = newValue.replace(/Path=[^; ]+;?/gi, 'Path=/;')
+                responseHeaders.append(key, newValue)
             } else {
                 responseHeaders.set(key, value)
             }
