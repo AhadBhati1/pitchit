@@ -53,6 +53,8 @@ export default function Home() {
     return <div style={{ padding: '100px', textAlign: 'center', color: 'var(--text-muted)' }}>Loading feed...</div>
   }
 
+  const [isMuted, setIsMuted] = useState(true)
+
   if (viewMode === 'elevator') {
     return (
       <div className="elevator-container">
@@ -61,6 +63,19 @@ export default function Home() {
           <button className="chip active" onClick={() => setViewMode('elevator')}>Elevator View</button>
           <button className="chip chip--ghost" onClick={() => setViewMode('classic')}>Classic</button>
         </div>
+
+        {/* Global Mute Toggle */}
+        <button
+          className="elevator-mute-toggle"
+          onClick={() => setIsMuted(!isMuted)}
+          aria-label={isMuted ? "Unmute" : "Mute"}
+        >
+          {isMuted ? (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z" /><line x1="23" y1="9" x2="17" y2="15" /><line x1="17" y1="9" x2="23" y2="15" /></svg>
+          ) : (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /></svg>
+          )}
+        </button>
 
         {pitches.length === 0 ? (
           <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', background: '#000', flexDirection: 'column', gap: '20px' }}>
@@ -75,7 +90,7 @@ export default function Home() {
                   src={pitch.video_url}
                   className="elevator-video"
                   autoPlay
-                  muted
+                  muted={isMuted}
                   loop
                   playsInline
                 />
@@ -167,9 +182,14 @@ export default function Home() {
           <aside className="feed-sidebar">
             <div className="sidebar-section">
               <div className="sidebar-title">About Groundfloor</div>
-              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '12px' }}>
-                A living feed of 60-second pitches. No deck, no connections, no gatekeeping. Just a founder with an idea.
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '20px' }}>
+                A living feed of 60-second pitches. No deck, no gatekeeping. Just a founder with an idea.
               </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Link href="/info?tab=how-it-works" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'none' }}>How it Works</Link>
+                <Link href="/info?tab=privacy" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'none' }}>Privacy Policy</Link>
+                <Link href="/info?tab=terms" style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textDecoration: 'none' }}>Terms of Service</Link>
+              </div>
             </div>
           </aside>
         </div>
