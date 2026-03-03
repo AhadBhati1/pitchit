@@ -5,153 +5,165 @@ import { createClient } from '@/utils/supabase/client'
 import { Pitch } from '@/types'
 
 interface Comment {
-    id: string
-    text: string
-    role: string
-    created_at: string
-    profiles: {
-        name: string
-        avatar_url: string | null
-    }
+  id: string
+  text: string
+  role: string
+  created_at: string
+  profiles: {
+    name: string
+    avatar_url: string | null
+  }
 }
 
 interface CommentDrawerProps {
-    pitchId: string
-    isOpen: boolean
-    onClose: () => void
-    user: any
+  pitchId: string
+  isOpen: boolean
+  onClose: () => void
+  user: any
 }
 
 export default function CommentDrawer({ pitchId, isOpen, onClose, user }: CommentDrawerProps) {
-    const [comments, setComments] = useState<Comment[]>([])
-    const [newComment, setNewComment] = useState('')
-    const [role, setRole] = useState('Viewer')
-    const [loading, setLoading] = useState(false)
-    const [submitting, setSubmitting] = useState(false)
-    const scrollRef = useRef<HTMLDivElement>(null)
+  const [comments, setComments] = useState<Comment[]>([])
+  const [newComment, setNewComment] = useState('')
+  const [role, setRole] = useState('Viewer')
+  const [loading, setLoading] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        if (isOpen) {
-            fetchComments()
-        }
-    }, [isOpen, pitchId])
-
-    const fetchComments = async () => {
-        setLoading(true)
-        try {
-            const res = await fetch(`/api/comments?pitchId=${pitchId}`)
-            const data = await res.json()
-            if (Array.isArray(data)) {
-                setComments(data)
-            }
-        } catch (err) {
-            console.error('Failed to fetch comments:', err)
-        } finally {
-            setLoading(false)
-        }
+  useEffect(() => {
+    if (isOpen) {
+      fetchComments()
     }
+  }, [isOpen, pitchId])
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!newComment.trim() || !user || submitting) return
-
-        setSubmitting(true)
-        try {
-            const res = await fetch('/api/comments', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ pitchId, text: newComment, role })
-            })
-            const data = await res.json()
-            if (data.id) {
-                setComments([...comments, data])
-                setNewComment('')
-                // Scroll to bottom
-                setTimeout(() => {
-                    if (scrollRef.current) {
-                        scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-                    }
-                }, 100)
-            }
-        } catch (err) {
-            console.error('Failed to post comment:', err)
-        } finally {
-            setSubmitting(false)
-        }
+  const fetchComments = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/comments?pitchId=${pitchId}`)
+      const data = await res.json()
+      if (res.ok && Array.isArray(data)) {
+        setComments(data)
+      } else {
+        console.error('Fetch comments error:', data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch comments:', err)
+    } finally {
+      setLoading(false)
     }
+  }
 
-    if (!isOpen) return null
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newComment.trim() || !user || submitting) return
 
-    return (
-        <div className="comment-drawer-overlay" onClick={onClose}>
-            <div className="comment-drawer" onClick={e => e.stopPropagation()}>
-                <header className="comment-drawer-header">
-                    <div className="drawer-handle" onClick={onClose}></div>
-                    <h3>Comments</h3>
-                    <button className="close-btn" onClick={onClose}>&times;</button>
-                </header>
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pitchId, text: newComment, role })
+      })
+      const data = await res.json()
 
-                <div className="comment-list" ref={scrollRef}>
-                    {loading ? (
-                        <div className="loading-state">Loading comments...</div>
-                    ) : comments.length === 0 ? (
-                        <div className="empty-state">No comments yet. Be the first to shout out!</div>
-                    ) : (
-                        comments.map(comment => (
-                            <div key={comment.id} className="comment-item">
-                                <div className="avatar avatar--sm" style={{ background: 'var(--text-primary)', color: 'white' }}>
-                                    {comment.profiles?.name?.[0] || 'A'}
-                                </div>
-                                <div className="comment-content">
-                                    <div className="comment-meta">
-                                        <span className="comment-author">{comment.profiles?.name || 'Anonymous'}</span>
-                                        <span className="comment-role">{comment.role}</span>
-                                    </div>
-                                    <p className="comment-text">{comment.text}</p>
-                                </div>
-                            </div>
-                        ))
-                    )}
+      if (!res.ok) {
+        const errorMsg = data.error || data.details || 'Unknown error'
+        alert(`Backend Error: ${errorMsg}`)
+        console.error('Comment post error:', data)
+        setSubmitting(false)
+        return
+      }
+
+      if (data && data.id) {
+        setComments([...comments, data])
+        setNewComment('')
+        // Scroll to bottom
+        setTimeout(() => {
+          if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+          }
+        }, 100)
+      }
+    } catch (err: any) {
+      console.error('Failed to post comment:', err)
+      alert(`Critical Error: ${err.message || 'Check connection'}`)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <div className="comment-drawer-overlay" onClick={onClose}>
+      <div className="comment-drawer" onClick={e => e.stopPropagation()}>
+        <header className="comment-drawer-header">
+          <div className="drawer-handle" onClick={onClose}></div>
+          <h3>Comments</h3>
+          <button className="close-btn" onClick={onClose}>&times;</button>
+        </header>
+
+        <div className="comment-list" ref={scrollRef}>
+          {loading ? (
+            <div className="loading-state">Loading comments...</div>
+          ) : comments.length === 0 ? (
+            <div className="empty-state">No comments yet. Be the first to shout out!</div>
+          ) : (
+            comments.map(comment => (
+              <div key={comment.id} className="comment-item">
+                <div className="avatar avatar--sm" style={{ background: 'var(--text-primary)', color: 'white' }}>
+                  {comment.profiles?.name?.[0] || 'A'}
                 </div>
+                <div className="comment-content">
+                  <div className="comment-meta">
+                    <span className="comment-author">{comment.profiles?.name || 'Anonymous'}</span>
+                    <span className="comment-role">{comment.role}</span>
+                  </div>
+                  <p className="comment-text">{comment.text}</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
 
-                {user ? (
-                    <form className="comment-input-area" onSubmit={handleSubmit}>
-                        <div className="role-selector">
-                            {['Operator', 'Investor', 'Customer', 'Viewer'].map(r => (
-                                <button
-                                    key={r}
-                                    type="button"
-                                    className={`role-chip ${role === r ? 'active' : ''}`}
-                                    onClick={() => setRole(r)}
-                                >
-                                    {r}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="input-row">
-                            <input
-                                type="text"
-                                placeholder="Add a comment..."
-                                value={newComment}
-                                onChange={e => setNewComment(e.target.value)}
-                            />
-                            <button
-                                type="submit"
-                                className="send-btn"
-                                disabled={!newComment.trim() || submitting}
-                            >
-                                {submitting ? '...' : 'Post'}
-                            </button>
-                        </div>
-                    </form>
-                ) : (
-                    <div className="login-prompt">
-                        <p>Sign in to join the conversation</p>
-                    </div>
-                )}
+        {user ? (
+          <form className="comment-input-area" onSubmit={handleSubmit}>
+            <div className="role-selector">
+              {['Operator', 'Investor', 'Customer', 'Viewer'].map(r => (
+                <button
+                  key={r}
+                  type="button"
+                  className={`role-chip ${role === r ? 'active' : ''}`}
+                  onClick={() => setRole(r)}
+                >
+                  {r}
+                </button>
+              ))}
             </div>
+            <div className="input-row">
+              <input
+                type="text"
+                placeholder="Add a comment..."
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="send-btn"
+                disabled={!newComment.trim() || submitting}
+              >
+                {submitting ? '...' : 'Post'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="login-prompt">
+            <p>Sign in to join the conversation</p>
+          </div>
+        )}
+      </div>
 
-            <style jsx>{`
+      <style jsx>{`
         .comment-drawer-overlay {
           position: fixed;
           top: 0;
@@ -310,6 +322,6 @@ export default function CommentDrawer({ pitchId, isOpen, onClose, user }: Commen
           font-weight: 600;
         }
       `}</style>
-        </div>
-    )
+    </div>
+  )
 }
