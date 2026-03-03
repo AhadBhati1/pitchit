@@ -10,19 +10,17 @@ CREATE TABLE IF NOT EXISTS public.comments (
   created_at timestamptz DEFAULT now()
 );
 
--- 2. ENSURE THE FOREIGN KEY EXISTS (This fixes the join error)
--- We try to add the constraint. It will fail if it exists, which is fine.
+-- 2. ENSURE THE FOREIGN KEY IS EXPLICITLY NAMED (This is what our API uses)
 DO $$ 
 BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.table_constraints 
-        WHERE table_name='comments' AND constraint_name='comments_user_id_fkey'
-    ) THEN
-        ALTER TABLE public.comments 
-        ADD CONSTRAINT comments_user_id_fkey 
-        FOREIGN KEY (user_id) REFERENCES public.profiles(id)
-        ON DELETE CASCADE;
-    END IF;
+    -- Remove the old one if it exists to clean up
+    ALTER TABLE public.comments DROP CONSTRAINT IF EXISTS comments_user_id_fkey;
+    
+    -- Add the new explicit one
+    ALTER TABLE public.comments 
+    ADD CONSTRAINT comments_user_id_fkey 
+    FOREIGN KEY (user_id) REFERENCES public.profiles(id)
+    ON DELETE CASCADE;
 END $$;
 
 -- 3. Enable RLS
@@ -34,17 +32,15 @@ DROP POLICY IF EXISTS "Anyone can insert comments for frictionless MVP." ON publ
 DROP POLICY IF EXISTS "Users can delete own comments." ON public.comments;
 
 -- 5. Create proper policies
-CREATE POLICY "Comments are viewable by everyone." ON public.comments
-  FOR SELECT USING (true);
+CREATE POLICY "Comments are viewable by everyone." ON public.comments FOR SELECT USING (true);
+CREATE POLICY "Anyone can insert comments for frictionless MVP." ON public.comments FOR INSERT WITH CHECK (true);
+CREATE POLICY "Users can delete own comments." ON public.comments FOR DELETE USING (auth.uid() = user_id);
 
-CREATE POLICY "Anyone can insert comments for frictionless MVP." ON public.comments
-  FOR INSERT WITH CHECK (true);
+-- 6. GRANT PERMISSIONS (Just in case)
+GRANT ALL ON public.comments TO authenticated, anon;
 
-CREATE POLICY "Users can delete own comments." ON public.comments
-  FOR DELETE USING (auth.uid() = user_id);
-
--- 6. RELOAD POSTGREST CACHE (Critical fix for "Relationship not found")
+-- 7. RELOAD POSTGREST CACHE (Critical fix for "Relationship not found")
 NOTIFY pgrst, 'reload schema';
 
--- 7. Success Check
-SELECT 'Comments relationship fixed and schema cache reloaded!' as status;
+-- 8. Success Check
+SELECT 'Comments relationship explicitly named and schema cache reloaded!' as status;

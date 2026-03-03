@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
         .from('comments')
         .select(`
       *,
-      profiles(name, avatar_url)
+      profiles!user_id(name, avatar_url)
     `)
         .eq('pitch_id', pitchId)
         .order('created_at', { ascending: true })
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         })
         .select(`
       *,
-      profiles(name, avatar_url)
+      profiles!user_id(name, avatar_url)
     `)
         .single()
 
