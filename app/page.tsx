@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client'
 import PitchCard from '@/components/PitchCard'
 import Link from 'next/link'
 import VoteButton from '@/components/VoteButton'
+import CommentDrawer from '@/components/CommentDrawer'
 import { Pitch } from '@/types'
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<any>(null)
   const [isMuted, setIsMuted] = useState(true)
+  const [commentingPitchId, setCommentingPitchId] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -89,15 +91,23 @@ export default function Home() {
                 isMuted={isMuted}
                 pitch={pitch}
                 isLoggedIn={!!user}
+                onOpenComments={() => setCommentingPitchId(pitch.id)}
               />
             </div>
           ))
         )}
+
+        <CommentDrawer
+          pitchId={commentingPitchId || ''}
+          isOpen={!!commentingPitchId}
+          onClose={() => setCommentingPitchId(null)}
+          user={user}
+        />
       </div>
     )
   }
 
-  function ElevatorVideo({ src, isMuted, pitch, isLoggedIn }: { src: string, isMuted: boolean, pitch: any, isLoggedIn: boolean }) {
+  function ElevatorVideo({ src, isMuted, pitch, isLoggedIn, onOpenComments }: { src: string, isMuted: boolean, pitch: any, isLoggedIn: boolean, onOpenComments: () => void }) {
     const videoRef = (el: HTMLVideoElement | null) => {
       if (!el) return
 
@@ -147,7 +157,7 @@ export default function Home() {
               isLoggedIn={isLoggedIn}
             />
           </div>
-          <div className="elevator-action-btn">
+          <div className="elevator-action-btn" onClick={onOpenComments} style={{ cursor: 'pointer' }}>
             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
             </div>
