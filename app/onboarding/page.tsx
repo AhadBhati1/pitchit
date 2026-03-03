@@ -31,11 +31,19 @@ export default function OnboardingPage() {
             setUser(user)
 
             // Fetch existing profile data
-            const { data: profile } = await supabase
+            const { data: profile, error: fetchError } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('id', user.id)
                 .single()
+
+            if (fetchError) {
+                console.error('Initial Profile Fetch Error:', fetchError)
+                // If it's a "column does not exist" error, remind the user to run SQL
+                if (fetchError.message?.includes('column') || fetchError.code === '42703') {
+                    alert('Database Setup Incomplete: Please run the SQL script in onboarding_schema.sql in your Supabase dashboard.')
+                }
+            }
 
             if (profile) {
                 if (profile.onboarding_completed) {
@@ -57,19 +65,33 @@ export default function OnboardingPage() {
 
     const handleSave = async () => {
         setSaving(true)
-        const { error } = await supabase
-            .from('profiles')
-            .update({
-                ...formData,
-                onboarding_completed: true
-            })
-            .eq('id', user.id)
+        console.log('Attempting to save profile for user:', user?.id)
 
-        if (error) {
-            alert('Error saving profile: ' + error.message)
+        try {
+            const { error } = await supabase
+                .from('profiles')
+                .update({
+                    ...formData,
+                    onboarding_completed: true
+                })
+                .eq('id', user.id)
+
+            if (error) {
+                console.error('Supabase Update Error:', error)
+                const msg = error.message || (typeof error === 'string' ? error : JSON.stringify(error))
+                alert('Error saving profile: ' + msg)
+
+                if (msg.includes('column') || error.code === '42703') {
+                    alert('REMINDER: Did you run the SQL script in onboarding_schema.sql?')
+                }
+                setSaving(false)
+            } else {
+                router.push('/submit')
+            }
+        } catch (err: any) {
+            console.error('Catch-all Update Error:', err)
+            alert('Critical Error: ' + (err.message || 'Unknown error occurred'))
             setSaving(false)
-        } else {
-            router.push('/submit')
         }
     }
 
