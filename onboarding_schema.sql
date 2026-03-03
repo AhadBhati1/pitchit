@@ -12,3 +12,4 @@ ADD COLUMN IF NOT EXISTS onboarding_completed boolean DEFAULT false;
 
 -- 3. Success message
 SELECT 'Profiles table successfully expanded with startup and onboarding fields' as status;
+

@@ -54,12 +54,9 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
             }
         }
 
-        const responseData = await response.arrayBuffer()
         const responseHeaders = new Headers()
 
         // Explicitly pass through critical headers like Set-Cookie
-        // But STRIP encoding headers because fetch/Next.js might have already decoded the body
-        // AND rewrite Domain/Path in Set-Cookie to match the current domain
         response.headers.forEach((value, key) => {
             const lowerKey = key.toLowerCase()
             if (
@@ -71,7 +68,6 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
             }
 
             if (lowerKey === 'set-cookie') {
-                // Rewrite Supabase domain to the current site domain
                 let newValue = value.replace(/Domain=[^; ]+;?/gi, '')
                 newValue = newValue.replace(/Path=[^; ]+;?/gi, 'Path=/;')
                 responseHeaders.append(key, newValue)
@@ -80,6 +76,16 @@ async function proxyRequest(request: NextRequest, { path }: { path: string[] }) 
             }
         })
 
+        // 204, 205, and 304 status codes MUST NOT have a body.
+        // The Response constructor throws if a body is provided for these codes.
+        if ([204, 205, 304].includes(response.status)) {
+            return new NextResponse(null, {
+                status: response.status,
+                headers: responseHeaders,
+            })
+        }
+
+        const responseData = await response.arrayBuffer()
         return new NextResponse(responseData, {
             status: response.status,
             headers: responseHeaders,
