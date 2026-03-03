@@ -67,6 +67,27 @@ export default async function ProfilePage({
         )}
         <p className="profile-bio">{profile?.bio || 'Building something new.'}</p>
 
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
+          {profile?.startup_name && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', fontWeight: 600 }}>
+              <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>Startup:</span>
+              {profile.startup_name}
+              {profile.startup_website && (
+                <a href={profile.startup_website} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--red)', fontSize: '0.75rem', marginLeft: '4px' }}>
+                  Visit ↗
+                </a>
+              )}
+            </div>
+          )}
+
+          {profile?.founder_linkedin && (
+            <a href={profile.founder_linkedin} target="_blank" rel="noopener noreferrer" className="chip chip--ghost" style={{ width: 'fit-content', fontSize: '0.7rem', padding: '4px 10px' }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '6px' }}><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
+              LinkedIn Profile
+            </a>
+          )}
+        </div>
+
         <div className="profile-stats">
           <div className="profile-stat">
             <div className="profile-stat-val">{formattedPitches.length}</div>

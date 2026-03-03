@@ -13,11 +13,27 @@ export default function SubmitPage() {
 
   useEffect(() => {
     const supabase = createClient()
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user)
+    async function checkAuthAndOnboarding() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setUser(user)
+
+        // Check if onboarding is completed
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('onboarding_completed')
+          .eq('id', user.id)
+          .single()
+
+        if (profile && !profile.onboarding_completed) {
+          router.push('/onboarding')
+          return
+        }
+      }
       setCheckingAuth(false)
-    })
-  }, [])
+    }
+    checkAuthAndOnboarding()
+  }, [router])
 
   // Form State
   const [videoUrl, setVideoUrl] = useState('')
