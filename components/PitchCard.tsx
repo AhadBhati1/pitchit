@@ -8,11 +8,13 @@ import VoteButton from './VoteButton'
 export default function PitchCard({
   pitch,
   index,
-  currentUser
+  currentUser,
+  onOpenComments
 }: {
   pitch: Pitch
   index: number
   currentUser?: string
+  onOpenComments?: () => void
 }) {
   const router = useRouter()
   const age = Math.round((Date.now() - new Date(pitch.created_at).getTime()) / (1000 * 60 * 60 * 24))
@@ -70,7 +72,15 @@ export default function PitchCard({
             isLoggedIn={!!currentUser}
           />
           <div className="act-sep" aria-hidden="true"></div>
-          <button className="act-btn" aria-label={`${pitch.comments} comments`}>
+          <button
+            className="act-btn"
+            aria-label={`${pitch.comments} comments`}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (onOpenComments) onOpenComments();
+            }}
+          >
             <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
               <path d="M9 1H2C1.4 1 1 1.4 1 2v6c0 .6.4 1 1 1h2l2 2 2-2h1c.6 0 1-.4 1-1V2c0-.6-.4-1-1-1z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" fill="none" />
             </svg>

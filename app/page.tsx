@@ -209,7 +209,13 @@ export default function Home() {
                 </div>
               ) : (
                 pitches.map((pitch, idx) => (
-                  <PitchCard key={pitch.id} pitch={pitch} index={idx} currentUser={user?.id} />
+                  <PitchCard
+                    key={pitch.id}
+                    pitch={pitch}
+                    index={idx}
+                    currentUser={user?.id}
+                    onOpenComments={() => setCommentingPitchId(pitch.id)}
+                  />
                 ))
               )}
             </div>
@@ -241,6 +247,13 @@ export default function Home() {
             z-index: 2000;
         }
       `}</style>
+
+      <CommentDrawer
+        pitchId={commentingPitchId || ''}
+        isOpen={!!commentingPitchId}
+        onClose={() => setCommentingPitchId(null)}
+        user={user}
+      />
     </>
   )
 }
