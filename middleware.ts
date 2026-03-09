@@ -44,8 +44,7 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  /* 
-  // Protected routes disabled for frictionless MVP
+  // Protected routes for production
   if (
     !user &&
     request.nextUrl.pathname.startsWith('/submit')
@@ -54,7 +53,6 @@ export async function middleware(request: NextRequest) {
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
-  */
 
   // Auth pages redirect to feed if already logged in (kept for convenience)
   if (
