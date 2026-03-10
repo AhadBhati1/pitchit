@@ -4,9 +4,10 @@ import Nav from "@/components/Nav";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Groundfloor — 60-Second Startup Pitches",
+  title: "Groundfloor | 60-Second Startup Pitches",
   description:
-    "Any founder, anywhere. Pitch your idea in 60 seconds. AI-scored. Community-ranked. No gatekeeping.",
+    "Pitch your startup idea in 60 seconds. Get reviewed by investors and the community. No pitch deck, no gatekeeping — just raw founder ambition.",
+  keywords: ["startup", "pitch", "founder", "investment", "elevator pitch", "entrepreneurship"],
 };
 
 export default function RootLayout({
