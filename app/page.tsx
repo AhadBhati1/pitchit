@@ -6,6 +6,7 @@ import PitchCard from '@/components/PitchCard'
 import Link from 'next/link'
 import VoteButton from '@/components/VoteButton'
 import CommentDrawer from '@/components/CommentDrawer'
+import Leaderboard from '@/components/Leaderboard'
 import { Pitch } from '@/types'
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
   const [user, setUser] = useState<any>(null)
   const [isMuted, setIsMuted] = useState(true)
   const [commentingPitchId, setCommentingPitchId] = useState<string | null>(null)
+  const [pitchOfTheDay, setPitchOfTheDay] = useState<any>(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -46,6 +48,12 @@ export default function Home() {
           has_voted: false
         }))
         setPitches(formatted)
+
+        // Compute POTD (highest upvoted)
+        if (formatted.length > 0) {
+          const sorted = [...formatted].sort((a, b) => b.upvotes - a.upvotes)
+          setPitchOfTheDay(sorted[0])
+        }
       }
       setLoading(false)
     }
@@ -203,25 +211,46 @@ export default function Home() {
             </div>
 
             <div className="pitch-list" role="feed">
+              {/* Pitch of the Day Spotlight */}
+              {pitchOfTheDay && (
+                <div className="potd-section">
+                  <div className="potd-badge">
+                    <span className="potd-icon">🔥</span>
+                    Pitch of the Day
+                  </div>
+                  <PitchCard
+                    pitch={pitchOfTheDay}
+                    index={-1}
+                    currentUser={user?.id}
+                    onOpenComments={() => setCommentingPitchId(pitchOfTheDay.id)}
+                  />
+                  <div className="potd-divider"></div>
+                </div>
+              )}
+
               {pitches.length === 0 ? (
                 <div style={{ padding: '48px 0', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
                   No pitches live yet. Be the first.
                 </div>
               ) : (
-                pitches.map((pitch, idx) => (
-                  <PitchCard
-                    key={pitch.id}
-                    pitch={pitch}
-                    index={idx}
-                    currentUser={user?.id}
-                    onOpenComments={() => setCommentingPitchId(pitch.id)}
-                  />
-                ))
+                pitches
+                  .filter(p => p.id !== pitchOfTheDay?.id) // Don't repeat POTD in the main list
+                  .map((pitch, idx) => (
+                    <PitchCard
+                      key={pitch.id}
+                      pitch={pitch}
+                      index={idx}
+                      currentUser={user?.id}
+                      onOpenComments={() => setCommentingPitchId(pitch.id)}
+                    />
+                  ))
               )}
             </div>
           </div>
 
           <aside className="feed-sidebar">
+            <Leaderboard pitches={pitches} />
+
             <div className="sidebar-section">
               <div className="sidebar-title">About Groundfloor</div>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.65, marginBottom: '20px' }}>
@@ -245,6 +274,37 @@ export default function Home() {
             right: 0;
             bottom: 0;
             z-index: 2000;
+        }
+
+        .potd-section {
+          margin-bottom: 32px;
+          position: relative;
+        }
+
+        .potd-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: #FFF9E6;
+          border: 1px solid #FFEBB3;
+          color: #B28900;
+          font-weight: 700;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          padding: 4px 10px;
+          border-radius: 100px;
+          margin-bottom: 12px;
+        }
+
+        .potd-icon {
+          font-size: 0.9rem;
+        }
+
+        .potd-divider {
+          height: 1px;
+          background: linear-gradient(to right, var(--border-light), transparent);
+          margin-top: 24px;
         }
       `}</style>
 
